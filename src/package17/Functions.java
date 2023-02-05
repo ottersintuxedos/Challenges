@@ -8,28 +8,6 @@ public class Functions {
 	
 	
 	
-	ArrayList<String> el = new ArrayList<String>(
-					Arrays.asList("|....@..|\r\n", 
-								  "|....@..|\r\n", 
-								  "|..@@@..|\r\n"));
-	
-	ArrayList<String> cross = new ArrayList<String>(
-			Arrays.asList("|...@...|\r\n",
-					  	  "|..@@@..|\r\n",
-					      "|...@...|\r\n"));
-	
-	ArrayList<String> hLine = new ArrayList<String>(
-			Arrays.asList("|..@@@@.|"));
-	
-	ArrayList<String> vLine = new ArrayList<String>(
-			Arrays.asList("|..@....|\r\n",
-					  	  "|..@....|\r\n",
-					  	  "|..@....|\r\n",
-						  "|..@....|\r\n"));
-	
-	ArrayList<String> square = new ArrayList<String>(
-			Arrays.asList("|..@@...|\r\n",
-						  "|..@@...|\r\n"));
 	
 	
 	static int getLeftmostPosition(ArrayList<String> shape) {
@@ -68,15 +46,91 @@ public class Functions {
 		return shape.lastIndexOf('@');
 	};
 	
+	static ArrayList<Integer> getHighestPosition(ArrayList<String> chamber) {
+		
+		ArrayList<Integer> topology = new ArrayList<Integer>();
+		String landscape = chamber.get(0);
+		
+		if (landscape.contains("--")) {
+				
+			}
+		else if (landscape.contains("#")) {
+			
+			for(int i = 1; i < landscape.length(); i++) {
+				
+				if (landscape.charAt(i) == '#') {
+					topology.add(i);	
+					};
+				}
+			}
+		
+		return topology;
+	}
 	
 	
-	static void moveRight(ArrayList<String> rock) {
+	//If the ArrayList passed into this method doesn't contain an '@' this method will return -1
+	static int lowestLayerAtPosition(int position, ArrayList<String> rock) {
+		int i = - 1;
+		for(i = rock.size() -1; i >= 0; i-- ) {
+			if (rock.get(i).charAt(position) == '@') {
+				break;
+			}
+		}		
+		return i;
+	}
+	
+	static ArrayList<String> getNextRock(ArrayList<String> previousRock){
+		ArrayList<String> el = new ArrayList<String>(
+				Arrays.asList("|....@..|", 
+							  "|....@..|", 
+							  "|..@@@..|"));
+
+		ArrayList<String> cross = new ArrayList<String>(
+				Arrays.asList("|...@...|",
+						  	  "|..@@@..|",
+						      "|...@...|"));
+
+		ArrayList<String> hLine = new ArrayList<String>(
+				Arrays.asList("|..@@@@.|"));
+
+		 ArrayList<String> vLine = new ArrayList<String>(
+				Arrays.asList("|..@....|",
+						  	  "|..@....|",
+						  	  "|..@....|",
+							  "|..@....|"));
+		
+		 ArrayList<String> square = new ArrayList<String>(
+				Arrays.asList("|..@@...|",
+							  "|..@@...|"));
+		
+		ArrayList<String> nextRock = new ArrayList<String>();
+		if(previousRock.equals(hLine)) {
+			nextRock = cross;
+		}
+		else if(previousRock.equals(cross)) {
+			nextRock = el;
+		}
+		else if(previousRock.equals(el)) {
+			nextRock = vLine;
+		}
+		else if(previousRock.equals(vLine)) {
+			nextRock = square;
+		}
+		else if(previousRock.equals(square)) {
+			nextRock = hLine;
+		}
+		return nextRock;
+	}
+	
+	
+	
+	static ArrayList<String> moveRight(ArrayList<String> rock) {
 		//Accounts for if the rock is already as far right as can be
 		if (getRightmostPosition(rock) == 7) {
 			for(int i = 0; i <= rock.size() - 1; i++ ) {
 				System.out.println(rock.get(i));
 			}
-			return;
+			return rock;
 		}
 		else {
 			ArrayList<String> output = new ArrayList<String>();
@@ -95,19 +149,19 @@ public class Functions {
 				
 			}
 			for(int i = 0; i <= output.size() - 1; i++ ) {
-				System.out.println(output.get(i));
+				//System.out.println(output.get(i));
 			}
-			return;
+			return output;
 		}
 	}
 	
-	static void moveLeft(ArrayList<String> rock) {
+	static ArrayList<String> moveLeft(ArrayList<String> rock) {
 		//Accounts for if the rock is already as far right as can be
 		if (getLeftmostPosition(rock) == 1) {
 			for(int i = 0; i <= rock.size() - 1; i++ ) {
-				System.out.println(rock.get(i));
+				//System.out.println(rock.get(i));
 			}
-			return;
+			return rock;
 		}
 		else {
 			ArrayList<String> output = new ArrayList<String>();
@@ -127,80 +181,106 @@ public class Functions {
 				
 			}
 			for(int i = 0; i <= output.size() - 1; i++ ) {
-				System.out.println(output.get(i));
+				//System.out.println(output.get(i));
 			}
-			return;
+			return output;
 		}
 		
 	}
 	
 	
 	
-	String moveStraightRockLeft(String input) {
-		if(input.charAt(7)=='.') {
-			int j = 0;
-			for(int i = 8 ; i < 0; i--) {
-				if (input.charAt(i)=='@') {
-					j = i;
-					break;
-				}
-			
-			}
-			if(j == 6) {
-				return "|...@@@@|";
-			}
-			else if (j == 5) {
-				return "|..@@@@.|";
-			}
-			else if(j == 4) {
-				return "|.@@@@..|";
-			}
-			else {return "error";}
-
-		}
-		else {
-			return input;
-		}
-	}
-	
-	String moveStraightRockRight(String input) {
-		if(input.charAt(1)=='.') {
-			int j = 0;
-			for(int i = 0 ; i < 8; i++) {
-				if (input.charAt(i)=='@') {
-					j = i;
-					break;
-				}
-			}
-			if(j == 4) {
-				return "|..@@@@.|";
-			}
-			else if(j == 3) {
-				return "|.@@@@..|";
-			}
-			else if(j == 2) {
-				return "|@@@@...|";
-			}
-			else {return "error";}
-
-		}
-		else {
-			return input;
-		}
-	}
-	
-	String steamParser(String directions, String input){
+	ArrayList<String> steamParser(String directions, ArrayList<String> input){
 		for(int i = 0; i <= directions.length() - 1; i++) {
 			if (directions.charAt(i)=='>'){
-				moveStraightRockRight(input);
+				moveRight(input);
 			}
 			else if (directions.charAt(i)=='<') {
-				moveStraightRockLeft(input);
+				moveLeft(input);
 			}
-			else return "error";
+			
 		}
 		return input;
 		
+	}
+	
+	static ArrayList<String> rockMaker(ArrayList<String> previousRock, ArrayList<String> chamber){
+		
+		ArrayList<String> output = new ArrayList<String>();
+		
+		ArrayList<String> nextRock = new ArrayList<String>(getNextRock(previousRock));
+		
+		ArrayList<String> spacing = new ArrayList<String>(
+				Arrays.asList("|.......|",
+							  "|.......|",
+							  "|.......|"));
+		
+		output.addAll(nextRock);
+		output.addAll(spacing);
+		output.addAll(chamber);
+		
+		
+		for(int i = 0; i <= output.size() - 1; i++ ) {
+			System.out.println(output.get(i));
+		}
+		return output;
+		
+	}
+	
+	static ArrayList<String> rockLander(ArrayList<String> rock, ArrayList<String> chamber){
+		ArrayList<String> output = new ArrayList<String>();
+		
+		for(int i = 0; i < rock.size() ; i++ ) {
+			String layer = rock.get(i);
+			StringBuilder layerParser = new StringBuilder(layer);
+			
+		//I know this could be simplified a bit	
+			for(int j = 0; j < layer.length(); j++ ) {
+				if(layer.charAt(j) == '@') {
+					layerParser.setCharAt(j, '#');
+					}
+			}
+			layer = layerParser.toString();
+			output.add(layer);
+		}
+		output.addAll(chamber);
+		return output;
+	}
+	
+	
+	
+	
+	static ArrayList<String> rockSim(String directions, ArrayList<String> firstRock){
+		ArrayList<String> chamber = new ArrayList<String>(
+				Arrays.asList("+-------+")
+				);
+		
+		ArrayList<String> currentRock = firstRock;
+		ArrayList<String> currentType = currentRock;
+		
+		for(int i = 0; i <= directions.length() - 1;) {
+
+			
+			if (directions.charAt(i) =='>'){
+				currentRock = moveRight(currentRock);
+			}
+			if (directions.charAt(i)=='<') {
+				currentRock = moveLeft(currentRock);
+			}
+			
+			if(i % 3 == 2) {
+				
+				
+				
+				
+				chamber = rockLander(currentRock, chamber);
+				currentRock = getNextRock(currentType);
+		
+			}
+			i++;
+		}
+		
+		return chamber;	
 	}
 	
 }
