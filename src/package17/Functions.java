@@ -2,6 +2,7 @@ package package17;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 
 
 public class Functions {
@@ -46,30 +47,36 @@ public class Functions {
 		return shape.lastIndexOf('@');
 	};
 	
-	static ArrayList<Integer> getHighestPosition(ArrayList<String> chamber) {
+	//Returns an ArrayList which represents how deep each position is 
+	static LinkedList<Integer> getTopology(ArrayList<String> chamber) {
 		
-		ArrayList<Integer> topology = new ArrayList<Integer>();
-		String landscape = chamber.get(0);
-		
-		if (landscape.contains("--")) {
-				
-			}
-		else if (landscape.contains("#")) {
+		//Each position starts at 0, at which point any corresponding rock will be stopped
+		LinkedList<Integer> topology = new LinkedList<Integer>(
+				Arrays.asList(0, 0, 0, 0, 0, 0, 0, 0, 0));
 			
-			for(int i = 1; i < landscape.length(); i++) {
+		for(int i = 0; i < topology.size(); i++) {
 				
-				if (landscape.charAt(i) == '#') {
-					topology.add(i);	
-					};
+				for(int depth = 0; depth < chamber.size(); depth++) {
+					if((chamber.get(depth)).charAt(i) == '#' || (chamber.get(depth)).charAt(i) == '-') {
+						topology.set(i, depth);
+						System.out.println("break");
+						break;
+					}
+							
 				}
 			}
+
+			
+			return topology;
+	
+		}
 		
-		return topology;
-	}
+		
+		
 	
 	
 	//If the ArrayList passed into this method doesn't contain an '@' this method will return -1
-	static int lowestLayerAtPosition(int position, ArrayList<String> rock) {
+	static int lowestRockLayerAtPosition(ArrayList<String> rock, int position) {
 		int i = - 1;
 		for(i = rock.size() -1; i >= 0; i-- ) {
 			if (rock.get(i).charAt(position) == '@') {
@@ -121,9 +128,7 @@ public class Functions {
 		}
 		return nextRock;
 	}
-	
-	
-	
+			
 	static ArrayList<String> moveRight(ArrayList<String> rock) {
 		//Accounts for if the rock is already as far right as can be
 		if (getRightmostPosition(rock) == 7) {
@@ -187,9 +192,7 @@ public class Functions {
 		}
 		
 	}
-	
-	
-	
+			
 	ArrayList<String> steamParser(String directions, ArrayList<String> input){
 		for(int i = 0; i <= directions.length() - 1; i++) {
 			if (directions.charAt(i)=='>'){
@@ -247,6 +250,25 @@ public class Functions {
 		return output;
 	}
 	
+	static ArrayList<String> fitter(ArrayList<String> rock, ArrayList<String> chamber) {
+		int leftPoint = getLeftmostPosition(rock);
+		int rightPoint = getRightmostPosition(rock);
+		
+//		int lowPointR = lowestLayerAtPosition(rock, rightPoint);
+//		int lowPointL = lowestLayerAtPosition(rock, leftPoint);
+
+		ArrayList<Integer> topology = new ArrayList<Integer>(getTopology(chamber));
+		
+		
+		int depth = 0;
+		return chamber;
+		
+		
+			
+		}
+			
+			
+		
 	
 	
 	
@@ -258,7 +280,7 @@ public class Functions {
 		ArrayList<String> currentRock = firstRock;
 		ArrayList<String> currentType = currentRock;
 		
-		for(int i = 0; i <= directions.length() - 1;) {
+		for(int i = 0; i <= directions.length() - 1; i++) {
 
 			
 			if (directions.charAt(i) =='>'){
@@ -269,18 +291,17 @@ public class Functions {
 			}
 			
 			if(i % 3 == 2) {
-				
-				
-				
-				
+
 				chamber = rockLander(currentRock, chamber);
 				currentRock = getNextRock(currentType);
 		
 			}
-			i++;
 		}
 		
 		return chamber;	
 	}
+	
+	
+	
 	
 }
