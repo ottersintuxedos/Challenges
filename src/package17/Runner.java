@@ -74,11 +74,11 @@ public class Runner {
 		
 	///	listPrinter(Functions.rockLander(hLine, hLine chamber1));
 	
-	listPrinter(Functions.rockSim(">><<<<", vLine));
+	// listPrinter(Functions.rockSim(">><<<<", vLine));
 	
-	System.out.println(Functions.getTopology(Functions.rockSim(">><<<<", vLine)));
+	//System.out.println(Chamber.getTopology(Functions.rockSim(">><<<<", vLine)));
 	
-	//System.out.println(Functions.rockSim(">><<<<", vLine));
+	listPrinter(Functions.rockSim(">>>><><><><><><>>>>>>>>>>>><<><", vLine));
 		
 	//	listPrinter(Functions.moveRight(cross));
 	
